@@ -1,4 +1,4 @@
-import 'dart:io'; // اضافه شده برای خواندن فایل صوتی
+import 'dart:io'; // برای خواندن فایل صوتی
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sidedeck/engine/music_utils.dart';
@@ -8,7 +8,7 @@ import 'package:sidedeck/state/library_controller.dart';
 import 'package:sidedeck/theme/sidedeck_theme.dart';
 import 'package:sidedeck/ui/library_drawer.dart';
 import 'package:sidedeck/ui/mixer_strip.dart';
-import 'package:sidedeck/ui/remix_dialog.dart'; // اضافه شده برای پنجره ریمیکس
+import 'package:sidedeck/ui/remix_dialog.dart'; // برای پنجره ریمیکس
 import 'package:sidedeck/ui/settings_page.dart';
 import 'package:sidedeck/ui/waveform.dart';
 
@@ -143,7 +143,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // --- تابع جدید برای باز کردن پنجره ریمیکس ---
+  // --- تابع باز کردن پنجره ریمیکس (با path اصلاح شد) ---
   void _openRemixDialog(int deckIndex) {
     final deck = _dj.deck(deckIndex);
     if (!deck.loaded) {
@@ -153,8 +153,8 @@ class _HomePageState extends State<HomePage> {
       return;
     }
     
-    // توجه: اگر نام متغیر مسیر فایل در کد شما چیز دیگری است (مثل deck.path)، آن را جایگزین کنید
-    final filePath = deck.filePath; 
+    // اصلاح شده: استفاده از deck.path به جای deck.filePath
+    final filePath = deck.path; 
     
     if (filePath != null && filePath.isNotEmpty) {
       showDialog(
@@ -339,10 +339,10 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 
-                // --- دکمه جدید ریمیکس (طلایی) اضافه شد ---
+                // --- دکمه ریمیکس ---
                 if (d.loaded)
                   Positioned(
-                    right: 56, // فاصله از سمت راست برای قرارگیری کنار دکمه GRID
+                    right: 56, 
                     top: overview + 2,
                     child: Material(
                       color: const Color(0xCC111111),
