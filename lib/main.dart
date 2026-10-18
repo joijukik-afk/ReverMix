@@ -1,32 +1,22 @@
-name: sidedeck
-description: Android DJ deck for local files and Subsonic.
-publish_to: "none"
-version: 1.1.2+8
+import 'package:flutter/material.dart';
+import 'package:sidedeck/theme/sidedeck_theme.dart';
+import 'package:sidedeck/ui/home_page.dart';
 
-environment:
-  sdk: ^3.12.2
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ReverMixApp()); // نام کلاس را تغییر دادم
+}
 
-dependencies:
-  flutter:
-    sdk: flutter
-  permission_handler: ^13.0.1
-  ffi: ^2.2.0
-  path: ^1.9.1
-  path_provider: ^2.1.6
-  shared_preferences: ^2.5.5
-  http: ^1.6.0
-  crypto: ^3.0.7
-  sqflite: ^2.4.3
-  file_picker: 8.1.4
-  
-  # ---- وابستگی‌های جدید ----
-  ffmpeg_kit_flutter_new_min_gpl: ^2.6.5
-  share_plus: ^10.0.0
+class ReverMixApp extends StatelessWidget {
+  const ReverMixApp({super.key});
 
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^6.0.0
-
-flutter:
-  uses-material-design: true
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'ReverMix', // نام نمایشی برنامه
+      debugShowCheckedModeBanner: false,
+      theme: SideDeckTheme.dark(),
+      home: const HomePage(),
+    );
+  }
+}
