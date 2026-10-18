@@ -1,3 +1,4 @@
+import 'dart:io'; // اضافه شده برای خواندن فایل صوتی
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sidedeck/engine/music_utils.dart';
@@ -7,6 +8,7 @@ import 'package:sidedeck/state/library_controller.dart';
 import 'package:sidedeck/theme/sidedeck_theme.dart';
 import 'package:sidedeck/ui/library_drawer.dart';
 import 'package:sidedeck/ui/mixer_strip.dart';
+import 'package:sidedeck/ui/remix_dialog.dart'; // اضافه شده برای پنجره ریمیکس
 import 'package:sidedeck/ui/settings_page.dart';
 import 'package:sidedeck/ui/waveform.dart';
 
@@ -139,6 +141,31 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  // --- تابع جدید برای باز کردن پنجره ریمیکس ---
+  void _openRemixDialog(int deckIndex) {
+    final deck = _dj.deck(deckIndex);
+    if (!deck.loaded) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('ابتدا یک آهنگ در این دک لود کنید')),
+      );
+      return;
+    }
+    
+    // توجه: اگر نام متغیر مسیر فایل در کد شما چیز دیگری است (مثل deck.path)، آن را جایگزین کنید
+    final filePath = deck.filePath; 
+    
+    if (filePath != null && filePath.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (_) => RemixDialog(audioFile: File(filePath)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('مسیر فایل آهنگ پیدا نشد!')),
+      );
+    }
   }
 
   @override
@@ -311,6 +338,47 @@ class _HomePageState extends State<HomePage> {
                       onTap: () => setState(() => _gridEditDeck = null),
                     ),
                   ),
+                
+                // --- دکمه جدید ریمیکس اضافه شد (کنار دکمه GRID) ---
+                if (d.loaded)
+                  Positioned(
+                    right: 56, // فاصله از سمت راست برای قرارگیری کنار دکمه GRID
+                    top: overview + 2,
+                    child: Material(
+                      color: const Color(0xCC111111),
+                      borderRadius: BorderRadius.circular(6),
+                      child: InkWell(
+                        onTap: () => _openRemixDialog(i),
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          height: 32,
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: Colors.amberAccent.withValues(alpha: 0.85)),
+                          ),
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(Icons.auto_awesome, size: 14, color: Colors.amberAccent),
+                              SizedBox(width: 4),
+                              Text(
+                                'REMIX',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: 0.6,
+                                  color: Colors.amberAccent,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                 if (d.loaded)
                   Positioned(
                     right: 4,
