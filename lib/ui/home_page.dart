@@ -339,7 +339,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 
-                // --- دکمه جدید ریمیکس اضافه شد (کنار دکمه GRID) ---
+                // --- دکمه جدید ریمیکس (طلایی) اضافه شد ---
                 if (d.loaded)
                   Positioned(
                     right: 56, // فاصله از سمت راست برای قرارگیری کنار دکمه GRID
